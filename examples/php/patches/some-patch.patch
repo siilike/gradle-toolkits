@@ -1,0 +1,6 @@
+--- App/Application.php	2023-04-03 23:23:20.487267009 +0300
++++ App/Application.php.patched	2023-04-03 23:23:08.047231133 +0300
+@@ -1,2 +1,2 @@
+ <?php
+-echo "FOO!";
++echo "BAR!";

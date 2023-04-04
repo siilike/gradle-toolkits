@@ -1,0 +1,41 @@
+{
+	name: siilike/test
+	autoload: {
+		psr-4: {
+			"App\\": App/
+		}
+	}
+	autoload-dev: {
+		classmap: [
+			../tests/
+		]
+	}
+	require: {
+		siilike/commonx: *
+		siilike/logging: *
+		siilike/preconditions: *
+
+		sentry/sentry: ^3
+	}
+	repositories: [
+		{
+			name: siilike/commonx
+			type: vcs
+			url: https://github.com/siilike/commonx
+		}
+		{
+			name: siilike/logging
+			type: vcs
+			url: https://github.com/siilike/logging
+		}
+		{
+			name: siilike/preconditions
+			type: vcs
+			url: https://github.com/siilike/preconditions
+		}
+	]
+	config: {
+		bin-dir: bin
+	}
+	minimum-stability: stable
+}

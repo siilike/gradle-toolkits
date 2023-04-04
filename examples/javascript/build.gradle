@@ -1,0 +1,107 @@
+
+plugins {
+	id "ee.keel.gradle.JsToolkitPlugin" version "3"
+}
+
+jsToolkit {
+	node {
+		version = new URL("https://nodejs.org/dist/v18.15.0/node-v18.15.0-linux-x64.tar.xz")
+	}
+
+	pnpm {
+		version = "8.1.0"
+	}
+
+	babel {
+		preset "production", "> 0.5%, last 3 versions, Firefox ESR, not dead"
+		preset "modern", "last 2 Chrome versions, last 2 Edge versions, last 2 Opera versions, last 2 Safari versions, Firefox ESR, last 2 iOS major versions, last 3 ChromeAndroid versions, last 2 FirefoxAndroid versions"
+		preset "ssr", "node 18"
+	}
+
+	distributions {
+		libraries {
+			library = true
+
+			copyLibrary("libs") { Directory a ->
+				from {
+					fileTree(a) {
+						include "client/**"
+						include ".version"
+					}.files
+				}
+			}
+
+			repo {
+				name = "example-static-libs"
+				path = "/data1/apps/example/static/l${librariesVersion.get()}/"
+			}
+		}
+
+		example {
+			dependsOn "libraries"
+
+			copyModule("example") { Directory a ->
+				from {
+					fileTree(a) {
+						include "client/**"
+						include "css/**"
+						include ".version"
+						include ".version-*"
+					}.files
+				}
+			}
+
+			repo {
+				name = "example-static"
+				path = "/data1/apps/example/static/v${version.get()}/"
+			}
+		}
+	}
+
+	outputs {
+		client {
+			preset "production", "modern"
+		}
+		server {
+			preset "ssr"
+			minify = false
+		}
+	}
+
+	libraries {
+		libs {
+		}
+	}
+
+	modules {
+		example {
+			include "**/**"
+			exclude "**/**"
+			library "libs"
+
+			css "20-test.css", "test.css"
+		}
+	}
+
+	runtimes {
+		example {
+			module "example"
+			template = file("templates/example.tpl")
+			templateVar "test", 5
+			indexFileName = "index.php"
+
+			distribution {
+				repo {
+					path = "/data1/apps/example/runtime/"
+				}
+			}
+		}
+	}
+
+	sentry {
+		token = "XXX"
+		url = "https://sentry.XXX/"
+		organization = "main"
+		projectName = "example"
+	}
+}

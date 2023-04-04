@@ -1,0 +1,101 @@
+
+plugins {
+	id 'java-gradle-plugin'
+	id 'com.gradle.plugin-publish' version '+'
+	id 'maven-publish'
+	id 'groovy'
+	id 'eclipse'
+}
+
+if(project.hasProperty("local"))
+{
+	publishing {
+		repositories {
+			maven {
+				url "file:///data1/mvn/"
+			}
+		}
+	}
+}
+
+description = 'Gradle Toolkits'
+group = 'ee.keel.gradle'
+
+if(project.hasProperty("local"))
+{
+	version = 'latest'
+}
+else
+{
+	version = '2.5'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+
+	maven {
+		url "https://plugins.gradle.org/m2/"
+	}
+}
+
+dependencies {
+	implementation 'com.netflix.nebula:gradle-ospackage-plugin:11.0.0'
+	implementation "org.zeromq:jeromq:0.5.1"
+	implementation 'org.hjson:hjson:3.0.0'
+//	implementation "io.github.java-diff-utils:java-diff-utils:4.12"
+	implementation 'io.reflectoring.diffparser:diffparser:1.4'
+}
+
+gradlePlugin {
+	plugins {
+		jsToolkitBase {
+			id = 'ee.keel.gradle.JsToolkitBasePlugin'
+			implementationClass = 'ee.keel.gradle.js.BasePlugin'
+			displayName = 'JavaScript Toolkit base plugin'
+			description = 'Seamless JavaScript development with Gradle'
+			tags.set([ 'javascript', 'node', 'nodejs', 'webpack', 'postcss' ])
+		}
+		jsToolkitTools {
+			id = 'ee.keel.gradle.JsToolkitToolsPlugin'
+			implementationClass = 'ee.keel.gradle.js.ToolsPlugin'
+			displayName = 'JavaScript Toolkit tools plugin'
+			description = 'Seamless JavaScript development with Gradle'
+			tags.set([ 'javascript', 'node', 'nodejs', 'webpack', 'postcss' ])
+		}
+		jsToolkit {
+			id = 'ee.keel.gradle.JsToolkitPlugin'
+			implementationClass = 'ee.keel.gradle.js.JavascriptPlugin'
+			displayName = 'JavaScript Toolkit plugin'
+			description = 'Seamless JavaScript development with Gradle'
+			tags.set([ 'javascript', 'node', 'nodejs', 'webpack', 'postcss' ])
+		}
+		phpToolkitBase {
+			id = 'ee.keel.gradle.PhpToolkitBasePlugin'
+			implementationClass = 'ee.keel.gradle.php.BasePlugin'
+			displayName = 'PHP Toolkit base plugin'
+			description = 'Seamless PHP development with Gradle'
+			tags.set([ 'php', 'composer' ])
+		}
+		phpToolkitTools {
+			id = 'ee.keel.gradle.PhpToolkitToolsPlugin'
+			implementationClass = 'ee.keel.gradle.php.ToolsPlugin'
+			displayName = 'PHP Toolkit tools plugin'
+			description = 'Seamless PHP development with Gradle'
+			tags.set([ 'php', 'composer' ])
+		}
+		phpToolkit {
+			id = 'ee.keel.gradle.PhpToolkitPlugin'
+			implementationClass = 'ee.keel.gradle.php.PhpPlugin'
+			displayName = 'PHP Toolkit plugin'
+			description = 'Seamless PHP development with Gradle'
+			tags.set([ 'php', 'composer' ])
+		}
+	}
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src"]
+sourceSets.main.resources.srcDirs += ["resources"]

@@ -1,0 +1,27 @@
+
+plugins {
+	id "ee.keel.gradle.PhpToolkitPlugin" version "latest"
+}
+
+phpToolkit {
+	php {
+		path = "/usr/bin/php8.2"
+	}
+
+	composer {
+		version = "latest-stable"
+	}
+
+	patches {
+		"disabled-patch" {
+			enabled = false
+		}
+		"some-patch" {}
+	}
+
+	distribution {
+		repo {
+			path = "/data1/apps/${project.name}/v${project.version}/"
+		}
+	}
+}

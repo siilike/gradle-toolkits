@@ -1,0 +1,14 @@
+{
+	"name": "siilike/phptoolkit-tools",
+	"version": "1.0",
+	"config": {
+		"bin-dir": "bin"
+	},
+	"repositories": [
+		{ "name": "siilike/translator-weblate", "type": "vcs", "url": "https://github.com/siilike/translator-weblate" }
+	],
+	"require": {
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
