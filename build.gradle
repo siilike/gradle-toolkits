@@ -27,7 +27,7 @@ if(project.hasProperty("local"))
 }
 else
 {
-	version = '2.5'
+	version = '3.0'
 }
 
 sourceCompatibility = 1.8
@@ -50,6 +50,9 @@ dependencies {
 }
 
 gradlePlugin {
+	website = 'https://github.com/siilike/gradle-toolkits'
+	vcsUrl = 'https://github.com/siilike/gradle-toolkits'
+
 	plugins {
 		jsToolkitBase {
 			id = 'ee.keel.gradle.JsToolkitBasePlugin'
