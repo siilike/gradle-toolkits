@@ -1,7 +1,7 @@
 
 const NODE_ENV = process.env.NODE_ENV || 'production'
 const TOOLS_DIR = process.env.TOOLS_DIR || './tools'
-const BROWSERSLIST = process.env.BROWSERSLIST || '> 0.5%, not IE11'
+const BROWSERSLIST = process.env.BROWSERSLIST || '> 0.5%, not dead'
 const REACT_PRAGMA = process.env.REACT_PRAGMA
 const JSTK_DEBUG = process.env.JSTK_DEBUG || 'false'
 const IS_TEST = process.env.IS_TEST || 'false'
@@ -21,7 +21,7 @@ module.exports = function(api)
 				{
 					"useBuiltIns": "usage",
 					"corejs": 3,
-					"targets": BROWSERSLIST,
+					"targets": IS_TEST === 'true' ? [] : BROWSERSLIST,
 					"modules": IS_TEST === 'true' ? 'commonjs' : false,
 					"shippedProposals": true,
 					"bugfixes": true,
@@ -57,7 +57,7 @@ module.exports = function(api)
 
 	if(NODE_ENV === 'development' && HMR === 'true')
 	{
-		config.plugins.push("react-refresh/babel");
+		config.plugins.push("react-refresh/babel")
 	}
 
 	if(JSTK_DEBUG === 'true')

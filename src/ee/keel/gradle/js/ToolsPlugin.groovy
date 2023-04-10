@@ -147,6 +147,8 @@ abstract class ToolsPlugin implements Plugin<Project>
 				"postcss/base.config.js",
 				"postcss/config.js",
 				"postcss/postcss.config.js",
+				"jest/reporter.js",
+				"jest/resolver.js",
 				"sentry/FrameRewriter.js",
 				"logging/logger.js",
 				"certs/cert.key",

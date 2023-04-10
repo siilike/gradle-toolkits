@@ -1,5 +1,6 @@
 package ee.keel.gradle.js.task
 
+
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -9,23 +10,16 @@ class WebpackTask extends AbstractWebpackTask
 	{
 		super()
 
-		doLast { t ->
-			new File(project.buildDir, "webpack."+this.module.get()+".env").text = getEnvironment().collect { k, v -> k+'="'+String.valueOf(v).replaceAll(/"/, '\"')+'"' }.join("\n")
-		}
-
 		configure {
-			if(project.hasProperty('inspect')) {
-				args '--inspect-brk'
-			}
-
-// 			args '--inspect'
-
 			args jstk.toolsDirectory.get().file("node_modules/webpack/bin/webpack.js").asFile.absolutePath
 
 			if(project.logger.debugEnabled)
 			{
 				args '--stats-errors', '--stats-error-details', 'true', '--stats-error-stack', '--stats-chunks', '--stats-modules', '--stats-reasons', '--stats-warnings', '--stats-assets'
 			}
+
+			environmentFile.fileProvider(this.module.map { new File(project.buildDir, "webpack."+it+".env") })
+			environmentProvider "RESOLVE_FILE", this.module.map { new File(project.buildDir, "webpack."+it+".js") }
 		}
 	}
 
@@ -40,7 +34,5 @@ class WebpackTask extends AbstractWebpackTask
 		{
 			args '--watch'
 		}
-
-		environment "RESOLVE_FILE", new File(project.buildDir, "webpack."+module.get()+".js")
 	}
 }

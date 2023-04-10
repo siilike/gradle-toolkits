@@ -95,12 +95,8 @@ abstract class JsToolkitExtension extends AbstractToolkitExtension
 
 		packages {
 			version "@babel/core", "latest"
-			version "@babel/plugin-proposal-class-properties", "latest"
 			version "@babel/plugin-proposal-decorators", "latest"
-			version "@babel/plugin-proposal-object-rest-spread", "latest"
 			version "@babel/plugin-transform-runtime", "latest"
-			version "@babel/plugin-syntax-dynamic-import", "latest"
-			version "@babel/plugin-transform-regenerator", "latest"
 			version "@babel/preset-env", "latest"
 			version "@babel/preset-react", "latest"
 			version "babel-loader", "latest"
@@ -137,7 +133,7 @@ abstract class JsToolkitExtension extends AbstractToolkitExtension
 			version "cssnano", "latest"
 			version "cssnano-preset-advanced", "latest"
 
-			version "webpack", "^5"
+			version "webpack", "5.77.0"
 			version "webpack-cli", "latest"
 			version "terser", "latest"
 			version "terser-webpack-plugin", "latest"
@@ -161,9 +157,11 @@ abstract class JsToolkitExtension extends AbstractToolkitExtension
 			version "zeromq", "6.0.0-beta.6"
 
 			version "jest", "latest"
+			version "jest-environment-jsdom", "latest"
 			version "@jest/reporters", "latest"
 			version "babel-jest", "latest"
-			version "jest-chain", "siilike/jest-chain"
+//			version "jest-chain", "siilike/jest-chain"
+			version "jest-chain", "latest"
 		}
 	}
 

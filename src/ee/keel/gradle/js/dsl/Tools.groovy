@@ -135,7 +135,7 @@ abstract class PnpmConfig extends ToolConfig
 				return "pnpm"
 			}
 
-			return Utils.getExt(project).toolsDirectory.file("pnpm/bin/pnpm.js").get().asFile.absolutePath
+			return Utils.getExt(project).toolsDirectory.file("pnpm/bin/pnpm.cjs").get().asFile.absolutePath
 		})
 	}
 }

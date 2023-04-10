@@ -78,6 +78,13 @@ class Utils
 				.find { Files.exists(it) && Files.isExecutable(it) }
 	}
 
+	static String buildAndFilterEnv(Map<String, Object> env)
+	{
+		def s = System.getenv()
+
+		return env.findAll { k, v -> s[k] !== v }.collect { k, v -> k+'="'+String.valueOf(v).replaceAll(/"/, '\"')+'"' }.join("\n")
+	}
+
 	static void debugTaskIO(Project project)
 	{
 		def width = 80

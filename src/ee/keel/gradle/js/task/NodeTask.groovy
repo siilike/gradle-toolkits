@@ -1,16 +1,21 @@
 package ee.keel.gradle.js.task
 
+import ee.keel.gradle.dsl.WithEnvironmentProperties
+import ee.keel.gradle.js.Utils
+import groovy.transform.CompileStatic
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
-
-import ee.keel.gradle.js.Utils
-import ee.keel.gradle.dsl.WithEnvironmentProperties
-import groovy.transform.CompileStatic
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 
 @CompileStatic
 class NodeTask extends ContinuousExecTask implements WithEnvironmentProperties
 {
 	private final static Logger logger = Logging.getLogger(NodeTask)
+
+	@OutputFile @Optional
+	final RegularFileProperty environmentFile = project.objects.fileProperty()
 
 	NodeTask()
 	{
@@ -25,6 +30,9 @@ class NodeTask extends ContinuousExecTask implements WithEnvironmentProperties
 
 			if(project.hasProperty("debugNode")) {
 				args "--inspect"
+			}
+			else if(project.hasProperty("debugNodeBrk")) {
+				args "--inspect-brk"
 			}
 
 			args((List<String>) n.args.get())
@@ -45,6 +53,11 @@ class NodeTask extends ContinuousExecTask implements WithEnvironmentProperties
 	protected void exec()
 	{
 		applyEnvironmentProperties()
+
+		if(environmentFile.getOrNull() != null)
+		{
+			environmentFile.get().asFile.text = ee.keel.gradle.Utils.buildAndFilterEnv(getEnvironment())
+		}
 
 		super.exec()
 	}
