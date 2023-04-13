@@ -18,7 +18,7 @@ class WebpackTask extends AbstractWebpackTask
 				args '--stats-errors', '--stats-error-details', 'true', '--stats-error-stack', '--stats-chunks', '--stats-modules', '--stats-reasons', '--stats-warnings', '--stats-assets'
 			}
 
-			environmentFile.fileProvider(this.module.map { new File(project.buildDir, "webpack."+it+".env") })
+			environmentFile.fileProvider(this.module.map { new File(project.buildDir, "webpack."+it+"."+browsersListEnv.get()+".env") })
 			environmentProvider "RESOLVE_FILE", this.module.map { new File(project.buildDir, "webpack."+it+".js") }
 		}
 	}

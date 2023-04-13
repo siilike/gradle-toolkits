@@ -1,6 +1,6 @@
 package ee.keel.gradle.js.task
 
-import ee.keel.gradle.Utils
+
 import groovy.transform.CompileStatic
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
