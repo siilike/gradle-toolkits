@@ -107,7 +107,7 @@ packages {
 
 See defaults in [`src/ee/keel/gradle/js/dsl/JsToolkitExtension.groovy`](src/ee/keel/gradle/js/dsl/JsToolkitExtension.groovy).
 
-After a successful build you should run the `saveBuildToolsLocks` task that will copy `tools/pnpm-lock.yaml` as `pnpm-lock-tools.yaml` into the root directory for predictable builds and also add it to version control.
+After a successful build you should run the `saveJsBuildToolsLocks` task that will copy `tools/pnpm-lock.yaml` as `pnpm-lock-tools.yaml` into the root directory for predictable builds and also add it to version control.
 
 ## Babel
 
@@ -322,7 +322,7 @@ The most important tasks are:
   * `distRuntimes` -- builds all distributions of runtimes
   * `distRuntimesDeb` -- builds deb packages of all runtimes
   * `saveLocks` -- save lock files
-  * `saveBuildToolsLocks` -- save build tools' lock files
+  * `saveJsBuildToolsLocks` -- save build tools' lock files
 
 Available project options:
 

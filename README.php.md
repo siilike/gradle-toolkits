@@ -77,7 +77,7 @@ packages {
 
 See defaults in [`src/ee/keel/gradle/php/dsl/PhpToolkitExtension.groovy`](src/ee/keel/gradle/php/dsl/PhpToolkitExtension.groovy).
 
-After a successful build you should run the `saveBuildToolsLocks` to copy `tools/composer.lock` as `composer-tools.lock` into the root directory for predictable builds and also add it to version control.
+After a successful build you should run the `savePhpBuildToolsLocks` to copy `tools/composer.lock` as `composer-tools.lock` into the root directory for predictable builds and also add it to version control.
 
 You can use the `tools/venv` to load an environment where `tools/bin` is in `$PATH`, so `php`, `composer`, `phpunit`, and other tools defined in the project are used by default:
 

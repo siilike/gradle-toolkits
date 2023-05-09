@@ -10,9 +10,11 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.UnknownTaskException
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.Delete
+import org.gradle.api.tasks.TaskProvider
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -93,18 +95,19 @@ abstract class ToolsPlugin implements Plugin<Project>
 				getExt().php.get().path.set(parentConfig.php.get().path)
 				getExt().composer.get().path.set(parentConfig.composer.get().path)
 
-				def ensureBuildTools = project.tasks.register(ENSURE_BUILD_TOOLS_TASK, { Task it ->
+				Utils.getOrCreateTaskProvider(project, ENSURE_BUILD_TOOLS_TASK, Task).configure { Task it ->
 					it.dependsOn parent.tasks.named(INSTALL_BUILD_TOOLS_TASK)
-				})
+				}
 
 				return
 			}
 		}
 
-		def cleanTools = project.tasks.register(CLEAN_TOOLS_TASK, Delete, { Delete it ->
+		def cleanTools = Utils.getOrCreateTaskProvider(project, CLEAN_TOOLS_TASK, Delete)
+		cleanTools.configure {
 			it.followSymlinks = false
 			it.delete getExt().toolsDirectory
-		})
+		}
 
 		def downloadComposer = project.tasks.register("downloadComposer", DownloadToolTask, { DownloadToolTask it ->
 			def version = getExt().composer.map { it.version.get() }
@@ -137,10 +140,11 @@ abstract class ToolsPlugin implements Plugin<Project>
 			}
 		})
 
-		def setupTools = project.tasks.register("setupTools", { Task it ->
+		def setupTools = Utils.getOrCreateTaskProvider(project, 'setupTools', Task)
+		setupTools.configure { it ->
 			it.dependsOn downloadComposer
 			it.dependsOn copyPhpDeps
-		})
+		}
 
 		def generateBuildToolsComposerJson = project.tasks.register("generateBuildToolsComposerJson", { Task it ->
 			def configFile = getExt().packages.get().configFile.present ? getExt().packages.get().configFile : getExt().toolsDirectory.file("php/composer.json")
@@ -265,7 +269,7 @@ exec "${phpPath}" "${toolPath}" "\$@"
 			}
 		})
 
-		def saveBuildToolsLocks = project.tasks.register("saveBuildToolsLocks", { Task it ->
+		def saveBuildToolsLocks = project.tasks.register("savePhpBuildToolsLocks", { Task it ->
 			it.dependsOn installBuildToolsComposer
 
 			it.inputs.files getExt().toolsDirectory.file("composer.lock")
@@ -293,15 +297,17 @@ exec bash --rcfile <(echo 'PS1="$PS1(venv) "') -i
 			}
 		})
 
-		def installBuildTools = project.tasks.register(INSTALL_BUILD_TOOLS_TASK, { Task it ->
+		def installBuildTools = Utils.getOrCreateTaskProvider(project, INSTALL_BUILD_TOOLS_TASK, Task)
+		installBuildTools.configure { it ->
 			it.dependsOn installBuildToolsComposer
 			it.dependsOn rewriteComposerBinPhpPath
 			it.dependsOn writeToolsSymlinks
 			it.dependsOn generateVEnv
-		})
+		}
 
-		def ensureBuildTools = project.tasks.register(ENSURE_BUILD_TOOLS_TASK, { Task it ->
+		def ensureBuildTools = Utils.getOrCreateTaskProvider(project, ENSURE_BUILD_TOOLS_TASK, Task)
+		ensureBuildTools.configure { it ->
 			it.dependsOn INSTALL_BUILD_TOOLS_TASK
-		})
+		}
 	}
 }

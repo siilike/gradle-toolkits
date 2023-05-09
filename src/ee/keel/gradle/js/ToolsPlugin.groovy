@@ -91,18 +91,19 @@ abstract class ToolsPlugin implements Plugin<Project>
 				getExt().node.get().path.set(parentConfig.node.get().path)
 				getExt().pnpm.get().path.set(parentConfig.pnpm.get().path)
 
-				def ensureBuildTools = project.tasks.register(ENSURE_BUILD_TOOLS_TASK, { Task it ->
+				Utils.getOrCreateTaskProvider(project, ENSURE_BUILD_TOOLS_TASK, Task).configure { Task it ->
 					it.dependsOn parent.tasks.named(INSTALL_BUILD_TOOLS_TASK)
-				})
+				}
 
 				return
 			}
 		}
 
-		def cleanTools = project.tasks.register(CLEAN_TOOLS_TASK, Delete, { Delete it ->
+		def cleanTools = ee.keel.gradle.php.Utils.getOrCreateTaskProvider(project, CLEAN_TOOLS_TASK, Delete)
+		cleanTools.configure {
 			it.followSymlinks = false
 			it.delete getExt().toolsDirectory
-		})
+		}
 
 		def downloadNode = project.tasks.register("downloadNode", DownloadToolTask, { DownloadToolTask it ->
 			def version = getExt().node.map { it.version.get() }
@@ -164,11 +165,12 @@ abstract class ToolsPlugin implements Plugin<Project>
 			}
 		})
 
-		def setupTools = project.tasks.register("setupTools", { Task it ->
+		def setupTools = Utils.getOrCreateTaskProvider(project, 'setupTools', Task)
+		setupTools.configure { it ->
 			it.dependsOn downloadNode
 			it.dependsOn downloadPnpm
 			it.dependsOn copyJsDeps
-		})
+		}
 
 		def generateBuildToolsPackageJson = project.tasks.register("generateBuildToolsPackageJson", { Task it ->
 			def configFile = getExt().packages.get().configFile
@@ -225,7 +227,7 @@ abstract class ToolsPlugin implements Plugin<Project>
 			it.setWorkingDir(getExt().toolsDirectory)
 		})
 
-		def saveBuildToolsLocks = project.tasks.register("saveBuildToolsLocks", { Task it ->
+		def saveBuildToolsLocks = project.tasks.register("saveJsBuildToolsLocks", { Task it ->
 			it.dependsOn installBuildToolsPnpm
 
 			it.inputs.files getExt().toolsDirectory.file("pnpm-lock.yaml")
@@ -237,12 +239,14 @@ abstract class ToolsPlugin implements Plugin<Project>
 			}
 		})
 
-		def installBuildTools = project.tasks.register(INSTALL_BUILD_TOOLS_TASK, { Task it ->
-			it.dependsOn(installBuildToolsPnpm)
-		})
+		def installBuildTools = Utils.getOrCreateTaskProvider(project, INSTALL_BUILD_TOOLS_TASK, Task)
+		installBuildTools.configure { it ->
+			it.dependsOn installBuildToolsPnpm
+		}
 
-		def ensureBuildTools = project.tasks.register(ENSURE_BUILD_TOOLS_TASK, { Task it ->
+		def ensureBuildTools = Utils.getOrCreateTaskProvider(project, ENSURE_BUILD_TOOLS_TASK, Task)
+		ensureBuildTools.configure { it ->
 			it.dependsOn INSTALL_BUILD_TOOLS_TASK
-		})
+		}
 	}
 }

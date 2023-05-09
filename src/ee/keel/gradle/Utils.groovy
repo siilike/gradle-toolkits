@@ -11,7 +11,9 @@ import groovy.util.logging.Slf4j
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.UnknownTaskException
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.tasks.TaskProvider
 import org.slf4j.LoggerFactory
 
 import java.nio.file.Files
@@ -83,6 +85,22 @@ class Utils
 		def s = System.getenv()
 
 		return env.findAll { k, v -> s[k] !== v }.collect { k, v -> k+'="'+String.valueOf(v).replaceAll(/"/, '\"')+'"' }.join("\n")
+	}
+
+	static <T extends Task> TaskProvider<T> getOrCreateTaskProvider(Project project, String name, Class<T> task)
+	{
+		TaskProvider<T> t
+
+		try
+		{
+			t = project.tasks.named(name, task)
+		}
+		catch(UnknownTaskException e)
+		{
+			t = project.tasks.register(name, task)
+		}
+
+		return t
 	}
 
 	static void debugTaskIO(Project project)

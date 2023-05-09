@@ -20,9 +20,9 @@ class PnpmInstallTask extends PnpmTask
 
 		configure {
 			command.add("install")
-			command.add("--no-lock")
 			command.add("--no-strict-peer-dependencies")
 			command.add("--virtual-store-dir=.pnpm")
+			command.add("--config.resolution-mode=highest")
 		}
 
 		logging.captureStandardOutput(LogLevel.INFO)
